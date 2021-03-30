@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--配置主库的数据源 -->
+    <bean id="masterDruidDataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://192.168.79.150:3307/shop"/>
+        <property name="username" value="root"/>
+        <property name="password" value="123456"/>
+    </bean>
+
+    <!--配置从库的数据源 -->
+    <bean id="slaveDruidDataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://192.168.79.150:3309/shop"/>
+        <property name="username" value="root"/>
+        <property name="password" value="123456"/>
+    </bean>
+
+    <!--配置自定义的数据源Bean-->
+    <bean id="myDataSource" class="org.msr.masterslave.config.MyDataSource">
+        <!--默认数据源:默认使用master-->
+        <property name="defaultTargetDataSource" ref="masterDruidDataSource"/>
+        <property name="targetDataSources">
+            <map>
+                <!--key的值必须和ThreadLocal中set进去的值一样，才能做到动态切换-->
+                <entry key="master" value-ref="masterDruidDataSource"/>
+                <entry key="slave" value-ref="slaveDruidDataSource"/>
+            </map>
+        </property>
+    </bean>
+
+    <!--配置连接工厂-->
+    <bean id="masterSqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="myDataSource"/>
+    </bean>
+
+    <!--配置包扫描-->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="masterSqlSessionFactoryBean"/>
+        <property name="basePackage" value="org.msr.masterslave.mapper"/>
+    </bean>
+</beans>
