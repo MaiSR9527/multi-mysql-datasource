@@ -1,5 +1,4 @@
 文章首发：[MySQL集群实战(一主多从，两主多从到SpringBoot多数据源实战)](https://www.maishuren.top/archives/mysql%E9%9B%86%E7%BE%A4%E5%AE%9E%E6%88%98%E4%B8%80%E4%B8%BB%E5%A4%9A%E4%BB%8E%E4%B8%A4%E4%B8%BB%E5%A4%9A%E4%BB%8E%E5%88%B0springboot%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90%E5%AE%9E%E6%88%98)
-文章首发：[备用链接](http://www.maishuren.top/posts/mysql/2021/03/202103281450.html)
 # MySQL主从复制概述
 
 在实际生产中，数据的重要性不言而喻
